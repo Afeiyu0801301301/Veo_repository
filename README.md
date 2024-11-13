@@ -57,6 +57,25 @@
 
 # 自动化测试设计思路
 
-## 方案一：appium+python+unittest，用python调用openpyxl中的load_workbook模块，以Excel配置化的方式，实现移动端的自动化测试，这样的好处是减轻了后续自动化用例的代码量，只需要修改Excel文件的配置信息，就可以不断地生成新的对应自动化验证case；难点是需要不断的调试，前期需要投入一定时间人力来进行代码编写和修改，以及配套的环境资源，配置项等等需提前准备完善
+## 方案一：appium+python+unittest，用python调用openpyxl中的load_workbook模块，以Excel配置化的方式，实现移动端的自动化测试，这样的好处是减轻了后续自动化用例的代码量以数据驱动自动化，具体的想法设计是：
+1、基础函数的封装
+	findElement(byType,matchValue);   //根据类型识别配合内容并返回内容
+	waitElementShow(byType,matchValue,model); //页面等待的判断模式
+	assertValue(realValue,exceptValue); //断言
+	screenshot();   // 页面截图
+	writeLog();     // 脚本执行日志记录
+
+2、unittest框架
+	setUp(); // 数据初始化
+	loadCase();  案例加载
+	setDown();  // 关闭drive，数据还原
+	
+3、脚本执行：
+	读取case数据文件Excel
+	使用unittest.TestSuite(); //创建测试套件
+
+4、执行过程日志、页面截图、测试报告生成
+
+ 这样只需要修改Excel文件的配置信息，就可以不断地生成新的对应自动化验证case；难点是需要不断的调试，前期需要投入一定时间人力来进行具体设计，编码和修改，以及配套的环境资源，配置项等等需提前准备完善
 
 ## 方案二：appium+python+pytest，直接写对应页面的自动化案例，分别选择验证头条栏目列表页，跳转详情页，发帖展示功能为自动化案例，部分的参数写死在python代码中，生成对应的py脚本，这样的好处是每个案例都是有对应的自动化测试脚本，简单便捷，不足之处是后续需要编写自动化案例，要不断写代码脚本。（本次项目因环境，配置项等原因，选择方案二为实现方案）
